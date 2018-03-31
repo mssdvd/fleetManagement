@@ -104,3 +104,6 @@ venv.bak/
 
 
 # End of https://www.gitignore.io/api/python
+
+# developement config
+/dev_config.py
