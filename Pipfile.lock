@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "174d83c783e22d7ddb9d52aec01f3d3af2bd598a2ded64306346f0d7332d06ea"
+            "sha256": "10834ee939a0d937060ae3ba3000aee4bd7212470ee3d7f5322702c0c1b931ed"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -30,6 +30,13 @@
             ],
             "index": "pypi",
             "version": "==0.12.2"
+        },
+        "flask-admin": {
+            "hashes": [
+                "sha256:e3a8268fdb6c271a44196de7f2a85faff886df18061d337e66b4b3c80e9c4f23"
+            ],
+            "index": "pypi",
+            "version": "==1.5.1"
         },
         "gunicorn": {
             "hashes": [
@@ -60,10 +67,10 @@
         },
         "peewee": {
             "hashes": [
-                "sha256:34000900eedfcce5a38eb84d8d197f41a537e10a36419aba0c407215dd87afeb"
+                "sha256:ac72ea1e4c2060d10de6c6f6b5fefb6c0434f9fd60766227d8b8e44b1898e1ba"
             ],
             "index": "pypi",
-            "version": "==3.2.0"
+            "version": "==3.2.1"
         },
         "psycopg2-binary": {
             "hashes": [
@@ -104,6 +111,19 @@
                 "sha256:d5da73735293558eb1651ee2fddc4d0dedcfa06538b8813a2e20011583c9e49b"
             ],
             "version": "==0.14.1"
+        },
+        "wtf-peewee": {
+            "hashes": [
+                "sha256:acd05d136c8595da3327fcf9176fa85fdcec1f2aac51d235e46e6fc7a0871283"
+            ],
+            "index": "pypi",
+            "version": "==3.0.0"
+        },
+        "wtforms": {
+            "hashes": [
+                "sha256:ffdf10bd1fa565b8233380cb77a304cd36fd55c73023e91d4b803c96bc11d46f"
+            ],
+            "version": "==2.1"
         }
     },
     "develop": {

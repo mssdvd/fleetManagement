@@ -1,3 +1,4 @@
+import datetime
 import os
 
 from peewee import (AutoField, CharField, DateField, FloatField,
@@ -29,14 +30,8 @@ class Drivers(BaseModel):
     surname = CharField(null=False)
     birth = DateField()
 
-    # @property
-    # def serialize(self):
-    #     data = {
-    #         "id": self.id,
-    #         "name": self.name,
-    #         "surname": self.surname,
-    #         "birth": self.birth,
-    #     }
+    def __str__(self):
+        return f"{self.name} {self.surname}"
 
 
 class Events(BaseModel):
@@ -46,12 +41,8 @@ class Events(BaseModel):
     id = AutoField()
     description = CharField(null=False)
 
-    # @property
-    # def serialize(self):
-    #     data = {
-    #         "id": self.id,
-    #         "description": self.description,
-    #     }
+    def __str__(self):
+        return self.description
 
 
 class Vehicles(BaseModel):
@@ -62,13 +53,8 @@ class Vehicles(BaseModel):
     plate = CharField(null=False)
     description = CharField()
 
-    # @property
-    # def serialize(self):
-    #     data = {
-    #         "id": self.id,
-    #         "plate": self.plate,
-    #         "description": self.description,
-    #     }
+    def __str__(self):
+        return self.plate
 
 
 class Reports(BaseModel):
@@ -83,18 +69,4 @@ class Reports(BaseModel):
     alt = FloatField()
     speed = FloatField()
     event = ForeignKeyField(Events, column_name="event")
-    time = DateTimeTZField()
-
-    # @property
-    # def serialize(self):
-    #     data = {
-    #         "id": self.id,
-    #         "driver": self.driver,
-    #         "vehicle": self.vehicle,
-    #         "lat": self.lat,
-    #         "lon": self.lon,
-    #         "alt": self.alt,
-    #         "speed": self.speed,
-    #         "event": self.event,
-    #         "time": self.time,
-    #     }
+    time = DateTimeTZField(datetime.datetime.now())

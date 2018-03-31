@@ -1,9 +1,36 @@
 from flask import Flask, abort, jsonify, render_template
+from flask_admin import Admin
+from flask_admin.contrib.peewee import ModelView
 from models import Drivers, Events, Reports, Vehicles
 from playhouse.shortcuts import model_to_dict
 
 app = Flask(__name__, instance_relative_config=True)
+app.config['SECRET_KEY'] = '1234567890'
 app.config.from_pyfile('dev_config.py', silent=True)
+admin = Admin(app, name='Fleet Management', template_mode='bootstrap3')
+
+
+class DriversView(ModelView):
+    column_sortable_list = ('id', 'name', 'surname', 'birth')
+
+
+class EventsView(ModelView):
+    column_sortable_list = ('id', 'description')
+
+
+class ReportsView(ModelView):
+    column_sortable_list = ('id', 'driver', 'vehicle', 'lat', 'lon', 'alt',
+                            'speed', 'event', 'time')
+
+
+class VehiclesView(ModelView):
+    column_sortable_list = ('id', 'plate', 'description')
+
+
+admin.add_view(DriversView(Drivers))
+admin.add_view(EventsView(Events))
+admin.add_view(ReportsView(Reports))
+admin.add_view(VehiclesView(Vehicles))
 
 
 @app.route('/api/drivers/')

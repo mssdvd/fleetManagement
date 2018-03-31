@@ -8,6 +8,8 @@ Flask = "*"
 peewee = "*"
 "psycopg2-binary" = "*"
 gunicorn = "*"
+Flask-Admin = "*"
+wtf-peewee = "*"
 
 [dev-packages]
 "flake8" = "*"
