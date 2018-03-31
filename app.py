@@ -2,8 +2,8 @@ from flask import Flask, jsonify, render_template
 from models import Drivers, Events, Reports, Vehicles
 from playhouse.shortcuts import model_to_dict
 
-app = Flask(__name__)
-# app.config['DEBUG'] = True
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_pyfile('dev_config.py', silent=True)
 
 
 @app.route('/api/drivers/')

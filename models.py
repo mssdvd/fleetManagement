@@ -5,12 +5,19 @@ from peewee import (AutoField, CharField, DateField, FloatField,
 from playhouse.db_url import connect
 from playhouse.postgres_ext import DateTimeTZField
 
-psql_db = connect(os.getenv('DATABASE_URL'))
+#  If it exits the dev_config module set the DATABASE_URL env variable
+try:
+    import dev_config
+except Exception:
+    pass
 
 
 class BaseModel(Model):
     class Meta:
-        database = psql_db
+        try:
+            database = connect(os.getenv('DATABASE_URL'))
+        except TypeError:
+            print("Please set DATABASE_URL env variable")
 
 
 class Drivers(BaseModel):
