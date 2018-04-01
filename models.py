@@ -16,7 +16,7 @@ except Exception:
 class BaseModel(Model):
     class Meta:
         try:
-            database = connect(os.getenv('DATABASE_URL'))
+            database = connect(os.getenv('DATABASE_URL'), autorollback=True)
         except TypeError:
             print("Please set DATABASE_URL env variable")
 
