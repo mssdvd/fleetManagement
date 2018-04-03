@@ -131,6 +131,71 @@ class Event_all_API(Resource):
 api.add_resource(Event_all_API, '/api/events/')
 
 
+def report_parser_query(id=None):
+    parser = reqparse.RequestParser()
+    if id is not None:
+        parser.add_argument(
+            'id', default=id, type=int, help="Report's id, {error_msg}")
+    parser.add_argument('driver', type=int, help="Driver, {error_msg}")
+    parser.add_argument('vehicle', type=int, help="Vehicle, {error_msg}")
+    parser.add_argument('lat', type=float, help="Latitude, {error_msg}")
+    parser.add_argument('lon', type=float, help="Longitude, {error_msg}")
+    parser.add_argument('alt', type=float, help="Altitude, {error_msg}")
+    parser.add_argument('speed', type=float, help="Speed, {error_msg}")
+    parser.add_argument('event', type=int, help="Event, {error_msg}")
+    parser.add_argument('time', type=str, help="Time, {error_msg}")
+    args = parser.parse_args(strict=True)
+    id = Reports.insert(args).execute()
+    return jsonify(model_to_dict(Reports.get_by_id(id)))
+
+
+class Report_id_API(Resource):
+    def get(self, id):
+        try:
+            return jsonify(model_to_dict(Reports.get_by_id(id)))
+        except Reports.DoesNotExist:
+            abort_404(id)
+
+    def put(self, id):
+        try:
+            Reports.delete().where(Reports.id == id).execute()
+            return report_parser_query(id)
+        except peewee.IntegrityError as e:
+            abort(500, message=str(e))
+
+    def delete(self, id):
+        try:
+            Reports.delete().where(Reports.id == id).execute()
+            return '', 204
+        except Reports.DoesNotExist:
+            abort_404(id)
+        except peewee.IntegrityError as e:
+            abort(500, message=str(e))
+
+
+api.add_resource(Report_id_API, '/api/reports/<int:id>')
+
+
+class Report_all_API(Resource):
+    def get(self):
+        try:
+            query = Reports.select().order_by(Reports.id)
+            return jsonify([model_to_dict(row) for row in query])
+        except Reports.DoesNotExist:
+            abort_404()
+
+    def post(self):
+        try:
+            return report_parser_query()
+        except peewee.DataError as e:
+            abort(400, message=(str(e)))
+        except peewee.IntegrityError as e:
+            abort(500, message=str(e))
+
+
+api.add_resource(Report_all_API, '/api/reports/')
+
+
 def vehicle_parser_query(id=None):
     parser = reqparse.RequestParser()
     if id is not None:
