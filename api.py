@@ -25,6 +25,8 @@ def driver_parser_query(id=None):
     parser.add_argument(
         'birth', type=inputs.date, help="Driver's birth, {error_msg}")
     args = parser.parse_args(strict=True)
+    if args.get('id') != id:
+        abort(400, message="The ids don't match")
     id = Drivers.insert(args).execute()
     return jsonify(model_to_dict(Drivers.get_by_id(id)))
 
@@ -82,6 +84,8 @@ def event_parser_query(id=None):
     parser.add_argument(
         'description', required=True, help="Event's description, {error_msg}")
     args = parser.parse_args(strict=True)
+    if args.get('id') != id:
+        abort(400, message="The ids don't match")
     id = Events.insert(args).execute()
     return jsonify(model_to_dict(Events.get_by_id(id)))
 
@@ -145,6 +149,8 @@ def report_parser_query(id=None):
     parser.add_argument('event', type=int, help="Event, {error_msg}")
     parser.add_argument('time', type=str, help="Time, {error_msg}")
     args = parser.parse_args(strict=True)
+    if args.get('id') != id:
+        abort(400, message="The ids don't match")
     id = Reports.insert(args).execute()
     return jsonify(model_to_dict(Reports.get_by_id(id)))
 
@@ -206,6 +212,8 @@ def vehicle_parser_query(id=None):
     parser.add_argument(
         'description', help="Vehicle's description, {error_msg}")
     args = parser.parse_args(strict=True)
+    if args.get('id') != id:
+        abort(400, message="The ids don't match")
     id = Vehicles.insert(args).execute()
     return jsonify(model_to_dict(Vehicles.get_by_id(id)))
 

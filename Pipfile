@@ -10,7 +10,7 @@ peewee = "*"
 gunicorn = "*"
 Flask-Admin = "*"
 wtf-peewee = "*"
-flask-restful = "*"
+Flask-RESTful = "*"
 
 [dev-packages]
 "flake8" = "*"
