@@ -96,7 +96,7 @@ class Event_id_API(Resource):
     def put(self, id):
         try:
             Events.delete().where(Events.id == id).execute()
-            return events_parser_query(id)
+            return event_parser_query(id)
         except peewee.IntegrityError as e:
             abort(500, message=str(e))
 
