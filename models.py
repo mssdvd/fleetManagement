@@ -21,14 +21,26 @@ class BaseModel(Model):
             print("Please set DATABASE_URL env variable")
 
 
-class Drivers(BaseModel):
+class Roles(BaseModel):
     class Meta:
-        table_name = "drivers"
+        table_name = "roles"
+
+    id = AutoField()
+    role = CharField(null=False)
+
+    def __str__(self):
+        return self.role
+
+
+class Users(BaseModel):
+    class Meta:
+        table_name = "users"
 
     id = AutoField()
     name = CharField(null=False)
     surname = CharField(null=False)
     birth = DateField()
+    role = ForeignKeyField(Roles, column_name="role", null=False)
 
     def __str__(self):
         return f"{self.name} {self.surname}"
@@ -62,7 +74,7 @@ class Reports(BaseModel):
         table_name = "reports"
 
     id = AutoField(null=False)
-    driver = ForeignKeyField(Drivers, column_name="driver")
+    driver = ForeignKeyField(Users, column_name="driver")
     vehicle = ForeignKeyField(Vehicles, column_name="vehicle")
     lat = FloatField()
     lon = FloatField()

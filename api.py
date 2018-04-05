@@ -1,7 +1,7 @@
 import peewee
 from flask import jsonify
 from flask_restful import Api, Resource, abort, inputs, reqparse
-from models import Drivers, Events, Reports, Vehicles
+from models import Events, Reports, Users, Vehicles
 from playhouse.shortcuts import model_to_dict
 
 api = Api()
@@ -13,67 +13,70 @@ def abort_404(id=None):
     abort(404, message=str(id) + " doesn't exist")
 
 
-def driver_parser_query(id=None):
+def user_parser_query(id=None):
     parser = reqparse.RequestParser()
     if id is not None:
         parser.add_argument(
-            'id', default=id, type=int, help="Driver's id, {error_msg}")
+            'id', default=id, type=int, help="User's id, {error_msg}")
+    parser.add_argument('name', required=True, help="User's name, {error_msg}")
     parser.add_argument(
-        'name', required=True, help="Driver's name, {error_msg}")
+        'surname', required=True, help="User's surname, {error_msg}")
     parser.add_argument(
-        'surname', required=True, help="Driver's surname, {error_msg}")
+        'birth', type=inputs.date, help="User's birth, {error_msg}")
     parser.add_argument(
-        'birth', type=inputs.date, help="Driver's birth, {error_msg}")
+        'role', required=True, type=int, help="User's  role, {error_msg}")
     args = parser.parse_args(strict=True)
     if args.get('id') != id:
         abort(400, message="The ids don't match")
-    id = Drivers.insert(args).execute()
-    return jsonify(model_to_dict(Drivers.get_by_id(id)))
+    id = Users.insert(args).execute()
+    return jsonify(model_to_dict(Users.get_by_id(id)))
 
 
-class Driver_id_API(Resource):
+class User_id_API(Resource):
     def get(self, id):
         try:
-            return jsonify(model_to_dict(Drivers.get_by_id(id)))
-        except Drivers.DoesNotExist:
+            return jsonify(model_to_dict(Users.get_by_id(id)))
+        except Users.DoesNotExist:
             abort_404(id)
 
     def put(self, id):
         try:
-            Drivers.delete().where(Drivers.id == id).execute()
-            return driver_parser_query(id)
+            Users.delete().where(Users.id == id).execute()
+            return user_parser_query(id)
         except peewee.IntegrityError as e:
             abort(500, message=str(e))
 
     def delete(self, id):
         try:
-            Drivers.delete().where(Drivers.id == id).execute()
+            Users.delete().where(Users.id == id).execute()
             return '', 204
-        except Drivers.DoesNotExist:
+        except Users.DoesNotExist:
             abort_404(id)
         except peewee.IntegrityError as e:
             abort(500, message=str(e))
 
 
-api.add_resource(Driver_id_API, '/api/drivers/<int:id>')
+api.add_resource(User_id_API, '/api/users/<int:id>')
 
 
-class Driver_all_API(Resource):
+class User_all_API(Resource):
     def get(self):
         try:
-            query = Drivers.select().order_by(Drivers.id)
+            query = Users.select().order_by(Users.id)
             return jsonify([model_to_dict(row) for row in query])
-        except Drivers.DoesNotExist:
+        except Users.DoesNotExist:
             abort_404()
 
     def post(self):
         try:
-            return driver_parser_query()
+            return user_parser_query()
         except peewee.DataError as e:
             abort(400, message=(str(e)))
+        except peewee.IntegrityError as e:
+            abort(500, message=str(e))
 
 
-api.add_resource(Driver_all_API, '/api/drivers/')
+api.add_resource(User_all_API, '/api/users/')
 
 
 def event_parser_query(id=None):
@@ -140,14 +143,14 @@ def report_parser_query(id=None):
     if id is not None:
         parser.add_argument(
             'id', default=id, type=int, help="Report's id, {error_msg}")
-    parser.add_argument('driver', type=int, help="Driver, {error_msg}")
+    parser.add_argument('user', type=int, help="User, {error_msg}")
     parser.add_argument('vehicle', type=int, help="Vehicle, {error_msg}")
     parser.add_argument('lat', type=float, help="Latitude, {error_msg}")
     parser.add_argument('lon', type=float, help="Longitude, {error_msg}")
     parser.add_argument('alt', type=float, help="Altitude, {error_msg}")
     parser.add_argument('speed', type=float, help="Speed, {error_msg}")
     parser.add_argument('event', type=int, help="Event, {error_msg}")
-    parser.add_argument('time', type=str, help="Time, {error_msg}")
+    parser.add_argument('time', help="Time, {error_msg}")
     args = parser.parse_args(strict=True)
     if args.get('id') != id:
         abort(400, message="The ids don't match")
@@ -261,3 +264,62 @@ class Vehicle_all_API(Resource):
 
 
 api.add_resource(Vehicle_all_API, '/api/vehicles/')
+
+
+def role_parser_query(id=None):
+    parser = reqparse.RequestParser()
+    if id is not None:
+        parser.add_argument(
+            'id', default=id, type=int, help="Role's id, {error_msg}")
+    parser.add_argument(
+        'role', required=True, help="Role's description, {error_msg}")
+    args = parser.parse_args(strict=True)
+    if args.get('id') != id:
+        abort(400, message="The ids don't match")
+    id = Roles.insert(args).execute()
+    return jsonify(model_to_dict(Roles.get_by_id(id)))
+
+
+class Role_id_API(Resource):
+    def get(self, id):
+        try:
+            return jsonify(model_to_dict(Roles.get_by_id(id)))
+        except Roles.DoesNotExist:
+            abort_404(id)
+
+    def put(self, id):
+        try:
+            Roles.delete().where(Roles.id == id).execute()
+            return role_parser_query(id)
+        except peewee.IntegrityError as e:
+            abort(500, message=str(e))
+
+    def delete(self, id):
+        try:
+            Roles.delete().where(Roles.id == id).execute()
+            return '', 204
+        except Roles.DoesNotExist:
+            abort_404(id)
+        except peewee.IntegrityError as e:
+            abort(500, message=str(e))
+
+
+api.add_resource(Role_id_API, '/api/roles/<int:id>')
+
+
+class Role_all_API(Resource):
+    def get(self):
+        try:
+            query = Roles.select().order_by(Roles.id)
+            return jsonify([model_to_dict(row) for row in query])
+        except Roles.DoesNotExist:
+            abort_404()
+
+    def post(self):
+        try:
+            return role_parser_query()
+        except peewee.DataError as e:
+            abort(400, message=(str(e)))
+
+
+api.add_resource(Role_all_API, '/api/roles/')
