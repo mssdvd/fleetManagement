@@ -45,18 +45,6 @@ class Events(BaseModel):
         return self.description
 
 
-class Vehicles(BaseModel):
-    class Meta:
-        table_name = "vehicles"
-
-    id = AutoField()
-    plate = CharField(null=False)
-    description = CharField()
-
-    def __str__(self):
-        return self.plate
-
-
 class Reports(BaseModel):
     class Meta:
         table_name = "reports"
@@ -70,3 +58,15 @@ class Reports(BaseModel):
     speed = FloatField()
     event = ForeignKeyField(Events, column_name="event")
     time = DateTimeTZField(datetime.datetime.now())
+
+
+class Vehicles(BaseModel):
+    class Meta:
+        table_name = "vehicles"
+
+    id = AutoField()
+    plate = CharField(null=False)
+    description = CharField()
+
+    def __str__(self):
+        return self.plate
