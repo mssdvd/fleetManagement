@@ -1,7 +1,7 @@
 import peewee
 from flask import jsonify
 from flask_restful import Api, Resource, abort, inputs, reqparse
-from models import Events, Reports, Users, Vehicles
+from models import Event, Report, Role, User, Vehicle
 from playhouse.shortcuts import model_to_dict
 
 api = Api()
@@ -28,43 +28,43 @@ def user_parser_query(id=None):
     args = parser.parse_args(strict=True)
     if args.get('id') != id:
         abort(400, message="The ids don't match")
-    id = Users.insert(args).execute()
-    return jsonify(model_to_dict(Users.get_by_id(id)))
+    id = User.insert(args).execute()
+    return jsonify(model_to_dict(User.get_by_id(id)))
 
 
 class User_id_API(Resource):
     def get(self, id):
         try:
-            return jsonify(model_to_dict(Users.get_by_id(id)))
-        except Users.DoesNotExist:
+            return jsonify(model_to_dict(User.get_by_id(id)))
+        except User.DoesNotExist:
             abort_404(id)
 
     def put(self, id):
         try:
-            Users.delete().where(Users.id == id).execute()
+            User.delete().where(User.id == id).execute()
             return user_parser_query(id)
         except peewee.IntegrityError as e:
             abort(500, message=str(e))
 
     def delete(self, id):
         try:
-            Users.delete().where(Users.id == id).execute()
+            User.delete().where(User.id == id).execute()
             return '', 204
-        except Users.DoesNotExist:
+        except User.DoesNotExist:
             abort_404(id)
         except peewee.IntegrityError as e:
             abort(500, message=str(e))
 
 
-api.add_resource(User_id_API, '/api/users/<int:id>')
+api.add_resource(User_id_API, '/api/user/<int:id>')
 
 
 class User_all_API(Resource):
     def get(self):
         try:
-            query = Users.select().order_by(Users.id)
+            query = User.select().order_by(User.id)
             return jsonify([model_to_dict(row) for row in query])
-        except Users.DoesNotExist:
+        except User.DoesNotExist:
             abort_404()
 
     def post(self):
@@ -76,7 +76,7 @@ class User_all_API(Resource):
             abort(500, message=str(e))
 
 
-api.add_resource(User_all_API, '/api/users/')
+api.add_resource(User_all_API, '/api/user/')
 
 
 def event_parser_query(id=None):
@@ -89,43 +89,43 @@ def event_parser_query(id=None):
     args = parser.parse_args(strict=True)
     if args.get('id') != id:
         abort(400, message="The ids don't match")
-    id = Events.insert(args).execute()
-    return jsonify(model_to_dict(Events.get_by_id(id)))
+    id = Event.insert(args).execute()
+    return jsonify(model_to_dict(Event.get_by_id(id)))
 
 
 class Event_id_API(Resource):
     def get(self, id):
         try:
-            return jsonify(model_to_dict(Events.get_by_id(id)))
-        except Events.DoesNotExist:
+            return jsonify(model_to_dict(Event.get_by_id(id)))
+        except Event.DoesNotExist:
             abort_404(id)
 
     def put(self, id):
         try:
-            Events.delete().where(Events.id == id).execute()
+            Event.delete().where(Event.id == id).execute()
             return event_parser_query(id)
         except peewee.IntegrityError as e:
             abort(500, message=str(e))
 
     def delete(self, id):
         try:
-            Events.delete().where(Events.id == id).execute()
+            Event.delete().where(Event.id == id).execute()
             return '', 204
-        except Events.DoesNotExist:
+        except Event.DoesNotExist:
             abort_404(id)
         except peewee.IntegrityError as e:
             abort(500, message=str(e))
 
 
-api.add_resource(Event_id_API, '/api/events/<int:id>')
+api.add_resource(Event_id_API, '/api/event/<int:id>')
 
 
 class Event_all_API(Resource):
     def get(self):
         try:
-            query = Events.select().order_by(Events.id)
+            query = Event.select().order_by(Event.id)
             return jsonify([model_to_dict(row) for row in query])
-        except Events.DoesNotExist:
+        except Event.DoesNotExist:
             abort_404()
 
     def post(self):
@@ -135,7 +135,7 @@ class Event_all_API(Resource):
             abort(400, message=(str(e)))
 
 
-api.add_resource(Event_all_API, '/api/events/')
+api.add_resource(Event_all_API, '/api/event/')
 
 
 def report_parser_query(id=None):
@@ -154,43 +154,43 @@ def report_parser_query(id=None):
     args = parser.parse_args(strict=True)
     if args.get('id') != id:
         abort(400, message="The ids don't match")
-    id = Reports.insert(args).execute()
-    return jsonify(model_to_dict(Reports.get_by_id(id)))
+    id = Report.insert(args).execute()
+    return jsonify(model_to_dict(Report.get_by_id(id)))
 
 
 class Report_id_API(Resource):
     def get(self, id):
         try:
-            return jsonify(model_to_dict(Reports.get_by_id(id)))
-        except Reports.DoesNotExist:
+            return jsonify(model_to_dict(Report.get_by_id(id)))
+        except Report.DoesNotExist:
             abort_404(id)
 
     def put(self, id):
         try:
-            Reports.delete().where(Reports.id == id).execute()
+            Report.delete().where(Report.id == id).execute()
             return report_parser_query(id)
         except peewee.IntegrityError as e:
             abort(500, message=str(e))
 
     def delete(self, id):
         try:
-            Reports.delete().where(Reports.id == id).execute()
+            Report.delete().where(Report.id == id).execute()
             return '', 204
-        except Reports.DoesNotExist:
+        except Report.DoesNotExist:
             abort_404(id)
         except peewee.IntegrityError as e:
             abort(500, message=str(e))
 
 
-api.add_resource(Report_id_API, '/api/reports/<int:id>')
+api.add_resource(Report_id_API, '/api/report/<int:id>')
 
 
 class Report_all_API(Resource):
     def get(self):
         try:
-            query = Reports.select().order_by(Reports.id)
+            query = Report.select().order_by(Report.id)
             return jsonify([model_to_dict(row) for row in query])
-        except Reports.DoesNotExist:
+        except Report.DoesNotExist:
             abort_404()
 
     def post(self):
@@ -202,7 +202,7 @@ class Report_all_API(Resource):
             abort(500, message=str(e))
 
 
-api.add_resource(Report_all_API, '/api/reports/')
+api.add_resource(Report_all_API, '/api/report/')
 
 
 def vehicle_parser_query(id=None):
@@ -217,43 +217,43 @@ def vehicle_parser_query(id=None):
     args = parser.parse_args(strict=True)
     if args.get('id') != id:
         abort(400, message="The ids don't match")
-    id = Vehicles.insert(args).execute()
-    return jsonify(model_to_dict(Vehicles.get_by_id(id)))
+    id = Vehicle.insert(args).execute()
+    return jsonify(model_to_dict(Vehicle.get_by_id(id)))
 
 
 class Vehicle_id_API(Resource):
     def get(self, id):
         try:
-            return jsonify(model_to_dict(Vehicles.get_by_id(id)))
-        except Vehicles.DoesNotExist:
+            return jsonify(model_to_dict(Vehicle.get_by_id(id)))
+        except Vehicle.DoesNotExist:
             abort_404(id)
 
     def put(self, id):
         try:
-            Vehicles.delete().where(Vehicles.id == id).execute()
+            Vehicle.delete().where(Vehicle.id == id).execute()
             return vehicle_parser_query(id)
         except peewee.IntegrityError as e:
             abort(500, message=str(e))
 
     def delete(self, id):
         try:
-            Vehicles.delete().where(Vehicles.id == id).execute()
+            Vehicle.delete().where(Vehicle.id == id).execute()
             return '', 204
-        except Vehicles.DoesNotExist:
+        except Vehicle.DoesNotExist:
             abort_404(id)
         except peewee.IntegrityError as e:
             abort(500, message=str(e))
 
 
-api.add_resource(Vehicle_id_API, '/api/vehicles/<int:id>')
+api.add_resource(Vehicle_id_API, '/api/vehicle/<int:id>')
 
 
 class Vehicle_all_API(Resource):
     def get(self):
         try:
-            query = Vehicles.select().order_by(Vehicles.id)
+            query = Vehicle.select().order_by(Vehicle.id)
             return jsonify([model_to_dict(row) for row in query])
-        except Vehicles.DoesNotExist:
+        except Vehicle.DoesNotExist:
             abort_404()
 
     def post(self):
@@ -263,7 +263,7 @@ class Vehicle_all_API(Resource):
             abort(400, message=(str(e)))
 
 
-api.add_resource(Vehicle_all_API, '/api/vehicles/')
+api.add_resource(Vehicle_all_API, '/api/vehicle/')
 
 
 def role_parser_query(id=None):
@@ -276,43 +276,43 @@ def role_parser_query(id=None):
     args = parser.parse_args(strict=True)
     if args.get('id') != id:
         abort(400, message="The ids don't match")
-    id = Roles.insert(args).execute()
-    return jsonify(model_to_dict(Roles.get_by_id(id)))
+    id = Role.insert(args).execute()
+    return jsonify(model_to_dict(Role.get_by_id(id)))
 
 
 class Role_id_API(Resource):
     def get(self, id):
         try:
-            return jsonify(model_to_dict(Roles.get_by_id(id)))
-        except Roles.DoesNotExist:
+            return jsonify(model_to_dict(Role.get_by_id(id)))
+        except Role.DoesNotExist:
             abort_404(id)
 
     def put(self, id):
         try:
-            Roles.delete().where(Roles.id == id).execute()
+            Role.delete().where(Role.id == id).execute()
             return role_parser_query(id)
         except peewee.IntegrityError as e:
             abort(500, message=str(e))
 
     def delete(self, id):
         try:
-            Roles.delete().where(Roles.id == id).execute()
+            Role.delete().where(Role.id == id).execute()
             return '', 204
-        except Roles.DoesNotExist:
+        except Role.DoesNotExist:
             abort_404(id)
         except peewee.IntegrityError as e:
             abort(500, message=str(e))
 
 
-api.add_resource(Role_id_API, '/api/roles/<int:id>')
+api.add_resource(Role_id_API, '/api/role/<int:id>')
 
 
 class Role_all_API(Resource):
     def get(self):
         try:
-            query = Roles.select().order_by(Roles.id)
+            query = Role.select().order_by(Role.id)
             return jsonify([model_to_dict(row) for row in query])
-        except Roles.DoesNotExist:
+        except Role.DoesNotExist:
             abort_404()
 
     def post(self):
@@ -322,4 +322,4 @@ class Role_all_API(Resource):
             abort(400, message=(str(e)))
 
 
-api.add_resource(Role_all_API, '/api/roles/')
+api.add_resource(Role_all_API, '/api/role/')

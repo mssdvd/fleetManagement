@@ -1,0 +1,29 @@
+{% block body %}
+
+{% if current_user.username %}
+<p>You are logged in already!</p>
+{% else %}
+<h1>Login</h1>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class=flashes>
+    {% for message in messages %}
+    <b>{{ message }}</b>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+<form method="POST">
+    {{ form.csrf_token }}
+    <input type="text" name="username" placeholder="Username">
+    <br/>
+    <input type="password" name="password" placeholder="Password">
+    <br/>
+    Remember me
+    <input type="checkbox" name="remember_me"/>
+    <br/>
+    <input type="submit" value="Log in">
+</form>
+{% endif %}
+{% endblock %}
