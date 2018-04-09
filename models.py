@@ -26,7 +26,7 @@ class Roles(BaseModel):
         table_name = "roles"
 
     id = AutoField()
-    role = CharField(null=False)
+    role = CharField()
 
     def __str__(self):
         return self.role
@@ -37,10 +37,13 @@ class Users(BaseModel):
         table_name = "users"
 
     id = AutoField()
-    name = CharField(null=False)
-    surname = CharField(null=False)
+    name = CharField()
+    surname = CharField()
     birth = DateField()
-    role = ForeignKeyField(Roles, column_name="role", null=False)
+    role = ForeignKeyField(
+        Roles,
+        column_name="role",
+    )
 
     def __str__(self):
         return f"{self.name} {self.surname}"
@@ -51,7 +54,7 @@ class Events(BaseModel):
         table_name = "events"
 
     id = AutoField()
-    description = CharField(null=False)
+    description = CharField()
 
     def __str__(self):
         return self.description
@@ -62,7 +65,7 @@ class Vehicles(BaseModel):
         table_name = "vehicles"
 
     id = AutoField()
-    plate = CharField(null=False)
+    plate = CharField()
     description = CharField()
 
     def __str__(self):
@@ -73,7 +76,7 @@ class Reports(BaseModel):
     class Meta:
         table_name = "reports"
 
-    id = AutoField(null=False)
+    id = AutoField()
     driver = ForeignKeyField(Users, column_name="driver")
     vehicle = ForeignKeyField(Vehicles, column_name="vehicle")
     lat = FloatField()
