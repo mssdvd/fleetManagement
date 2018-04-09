@@ -14,7 +14,7 @@ from wtforms import BooleanField, PasswordField, StringField
 from wtforms.validators import DataRequired
 
 app = Flask(__name__, instance_relative_config=True)
-app.secret_key = os.urandom(24)
+app.["SECRET_KEY"] = os.getenv('SECRET_KEY')
 app.config['ERROR_404_HELP'] = False
 csrf = CSRFProtect(app)
 login = LoginManager(app)
