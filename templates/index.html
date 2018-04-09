@@ -5,13 +5,25 @@
 	</head>
 	<body>
 		<h1>Fleet Management by Masserut</h1>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class=flashes>
+            {% for message in messages %}
+            <b>{{ message }}</b>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block content %}
+        {% if current_user.is_authenticated %}
+        <h2>Hi, {{ current_user.username }}!</h2>
+        <a href="/logout">Logout</a>
         <h3>Admin</h3>
         <a href="/admin">Admin</a>
-        <form action="https://mssdvd-fm.herokuapp.com/admin">
-              <input type="text" placeholder="Enter Username" required>
-              <input type="password" placeholder="Enter Password" required>
-              <button type="submit">Login</button>
-        </form>
+        {% else %}
+        <a href="/login">Login</a>
+        {% endif %}
+        {% endblock %}
         <h3>API</h3>
         <ul>
             <li><a href="/api/user">User</a></li>

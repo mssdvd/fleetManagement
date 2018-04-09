@@ -1,10 +1,12 @@
 import datetime
 import os
 
+from flask_login import UserMixin
 from peewee import (AutoField, BooleanField, CharField, DateField, FloatField,
                     ForeignKeyField, Model)
 from playhouse.db_url import connect
 from playhouse.postgres_ext import DateTimeTZField
+from werkzeug.security import check_password_hash, generate_password_hash
 
 #  If it exits the dev_config module set the DATABASE_URL env variable
 try:
@@ -45,7 +47,7 @@ class Role(BaseModel):
         return self.role
 
 
-class User(BaseModel):
+class User(UserMixin, BaseModel):
     class Meta:
         table_name = "user"
 
@@ -57,6 +59,12 @@ class User(BaseModel):
     role = ForeignKeyField(Role, column_name="role")
     username = CharField(unique=True)
     password = CharField()
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
     def __str__(self):
         return f"{self.name} {self.surname} ({self.username})"
