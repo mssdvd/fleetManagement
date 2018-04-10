@@ -1,9 +1,12 @@
-from flask import redirect, request, url_for
+from flask import current_app, redirect, request, session, url_for
 from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.contrib.peewee import ModelView
+from flask_admin.form import SecureForm
 from flask_login.utils import current_user
+from flask_wtf.csrf import _FlaskFormCSRF
 from models import Event, Message, Report, Role, Trip, User, Vehicle
 from werkzeug.security import generate_password_hash
+from wtforms.meta import DefaultMeta
 
 
 class FleetManagementIndexView(AdminIndexView):
@@ -23,6 +26,19 @@ admin = Admin(
 class FleetManagementView(ModelView):
     can_export = True
     can_view_details = True
+
+    class CustomSecureForm(SecureForm):
+        # https://github.com/flask-admin/flask-admin/issues/858#issuecomment-354927745
+        class Meta(DefaultMeta):
+            csrf_class = _FlaskFormCSRF
+            csrf_context = session
+
+            @property
+            def csrf_secret(self):
+                return current_app.config.get('SECRET_KEY',
+                                              current_app.secret_key)
+
+    form_base_class = CustomSecureForm
 
     def is_accessible(self):
         return current_user.is_authenticated
