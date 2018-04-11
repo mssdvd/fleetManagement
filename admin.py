@@ -4,7 +4,7 @@ from flask_admin.contrib.peewee import ModelView
 from flask_admin.form import SecureForm
 from flask_login.utils import current_user
 from flask_wtf.csrf import _FlaskFormCSRF
-from models import Event, Message, Report, Role, Trip, User, Vehicle, Company
+from models import Company, Event, Message, Report, Role, Trip, User, Vehicle
 from werkzeug.security import generate_password_hash
 from wtforms.meta import DefaultMeta
 
@@ -53,7 +53,9 @@ class CompanyView(FleetManagementView):
 
 
 class UserView(FleetManagementView):
-    column_editable_list = ('name', 'surname', 'birth', 'role', 'username', 'employer')
+    column_default_sort = 'id'
+    column_editable_list = ('name', 'surname', 'birth', 'role', 'username',
+                            'employer')
     column_exclude_list = ('password')
     column_sortable_list = ('id', 'name', 'surname', 'birth', 'role',
                             'username', 'employer')
