@@ -104,7 +104,7 @@ class Trip(BaseModel):
     dest_lat = FloatField()
     dest_lon = FloatField()
     dep_time = DateTimeTZField()
-    ret_time = DateTimeTZField()
+    ret_time = DateTimeTZField(null=True)
 
     def __str__(self):
         return f"{self.dest_name} {self.dep_time}"
