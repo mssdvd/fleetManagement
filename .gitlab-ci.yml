@@ -1,0 +1,8 @@
+staging:
+  type: deploy
+  script:
+  - gem install dpl
+  - dpl --provider=heroku --app=mssdvd-fm --api-key=$HEROKU_STAGING_API_KEY
+
+  only:
+  - master

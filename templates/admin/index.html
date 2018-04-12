@@ -2,4 +2,8 @@
 
 {% block body %}
 <a class="btn btn-primary" href="/"><i class="glyphicon glyphicon-chevron-left"></i> Home</a>
+{% if not current_user.is_authenticated %}
+<br/>
+<a href="/login">Login</a>
+{% endif %}
 {% endblock %}
