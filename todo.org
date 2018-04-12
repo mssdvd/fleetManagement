@@ -1,0 +1,11 @@
+* API [0/2]
+  - [ ] Drop flask-restful [0/2]
+    - [ ] Implement marshmallow
+    - [ ] Use flask's MethodView
+  - [ ] Basic documentation
+* Use sqlalchemy instead of peewee [0/2]
+  - [ ] Convert models
+  - [ ] Use sqlalchemy methods in every file
+* Admin page [0/3]
+  - [ ] Show current trips
+  - [ ] Limit usage based on role
