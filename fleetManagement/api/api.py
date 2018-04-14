@@ -1,6 +1,7 @@
 from flask import Blueprint
 
 from .company_api import CompanyAPI
+from .role_api import RoleAPI
 from .user_api import UserAPI
 
 api = Blueprint('api', __name__, url_prefix='/api')
@@ -23,3 +24,10 @@ api.add_url_rule(
     '/company/<int:id>',
     view_func=company_view,
     methods=['DELETE', 'GET', 'PUT'])
+
+role_view = RoleAPI.as_view('role_api')
+api.add_url_rule(
+    '/role/', defaults={'id': None}, view_func=role_view, methods=['GET'])
+api.add_url_rule('/role/', view_func=role_view, methods=['POST'])
+api.add_url_rule(
+    '/role/<int:id>', view_func=role_view, methods=['DELETE', 'GET', 'PUT'])
