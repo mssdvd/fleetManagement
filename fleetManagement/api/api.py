@@ -2,6 +2,7 @@ from flask import Blueprint
 
 from .company_api import CompanyAPI
 from .event_api import EventAPI
+from .message_api import MessageAPI
 from .report_api import ReportAPI
 from .role_api import RoleAPI
 from .trip_api import TripAPI
@@ -69,4 +70,16 @@ api.add_url_rule('/vehicle/', view_func=vehicle_view, methods=['POST'])
 api.add_url_rule(
     '/vehicle/<int:id>',
     view_func=vehicle_view,
+    methods=['DELETE', 'GET', 'PUT'])
+
+message_view = MessageAPI.as_view('message_api')
+api.add_url_rule(
+    '/message/',
+    defaults={'id': None},
+    view_func=message_view,
+    methods=['GET'])
+api.add_url_rule('/message/', view_func=message_view, methods=['POST'])
+api.add_url_rule(
+    '/message/<int:id>',
+    view_func=message_view,
     methods=['DELETE', 'GET', 'PUT'])
