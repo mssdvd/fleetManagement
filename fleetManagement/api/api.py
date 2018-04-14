@@ -4,6 +4,7 @@ from .company_api import CompanyAPI
 from .event_api import EventAPI
 from .report_api import ReportAPI
 from .role_api import RoleAPI
+from .trip_api import TripAPI
 from .user_api import UserAPI
 
 api = Blueprint('api', __name__, url_prefix='/api')
@@ -49,3 +50,10 @@ api.add_url_rule(
     '/report/<int:id>',
     view_func=report_view,
     methods=['DELETE', 'GET', 'PUT'])
+
+trip_view = TripAPI.as_view('trip_api')
+api.add_url_rule(
+    '/trip/', defaults={'id': None}, view_func=trip_view, methods=['GET'])
+api.add_url_rule('/trip/', view_func=trip_view, methods=['POST'])
+api.add_url_rule(
+    '/trip/<int:id>', view_func=trip_view, methods=['DELETE', 'GET', 'PUT'])
