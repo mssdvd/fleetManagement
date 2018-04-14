@@ -21,7 +21,6 @@ login = LoginManager(app)
 login.login_view = '/login'
 app.config.from_pyfile('dev_config.py', silent=True)
 admin.init_app(app)
-# api.init_app(app)
 app.register_blueprint(api)
 csrf.exempt(api)
 
