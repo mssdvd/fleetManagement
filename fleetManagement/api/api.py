@@ -1,5 +1,6 @@
-from flask import Blueprint, abort, jsonify
+from flask import Blueprint
 
+from .company_api import CompanyAPI
 from .user_api import UserAPI
 
 api = Blueprint('api', __name__, url_prefix='/api')
@@ -10,3 +11,15 @@ api.add_url_rule(
 api.add_url_rule('/user/', view_func=user_view, methods=['POST'])
 api.add_url_rule(
     '/user/<int:id>', view_func=user_view, methods=['DELETE', 'GET', 'PUT'])
+
+company_view = CompanyAPI.as_view('company_api')
+api.add_url_rule(
+    '/company/',
+    defaults={'id': None},
+    view_func=company_view,
+    methods=['GET'])
+api.add_url_rule('/company/', view_func=company_view, methods=['POST'])
+api.add_url_rule(
+    '/company/<int:id>',
+    view_func=company_view,
+    methods=['DELETE', 'GET', 'PUT'])
