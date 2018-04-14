@@ -6,6 +6,7 @@ from .report_api import ReportAPI
 from .role_api import RoleAPI
 from .trip_api import TripAPI
 from .user_api import UserAPI
+from .vehicle_api import VehicleAPI
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
@@ -57,3 +58,15 @@ api.add_url_rule(
 api.add_url_rule('/trip/', view_func=trip_view, methods=['POST'])
 api.add_url_rule(
     '/trip/<int:id>', view_func=trip_view, methods=['DELETE', 'GET', 'PUT'])
+
+vehicle_view = VehicleAPI.as_view('vehicle_api')
+api.add_url_rule(
+    '/vehicle/',
+    defaults={'id': None},
+    view_func=vehicle_view,
+    methods=['GET'])
+api.add_url_rule('/vehicle/', view_func=vehicle_view, methods=['POST'])
+api.add_url_rule(
+    '/vehicle/<int:id>',
+    view_func=vehicle_view,
+    methods=['DELETE', 'GET', 'PUT'])
