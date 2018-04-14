@@ -12,6 +12,7 @@ wtf-peewee = "*"
 Flask-RESTful = "*"
 flask-login = "*"
 flask-wtf = "*"
+marshmallow = "*"
 
 [dev-packages]
 "flake8" = "*"

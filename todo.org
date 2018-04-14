@@ -6,6 +6,8 @@
 * Use sqlalchemy instead of peewee [0/2]
   - [ ] Convert models
   - [ ] Use sqlalchemy methods in every file
-* Admin page [0/3]
+* Admin page [0/2]
   - [ ] Show current trips
   - [ ] Limit usage based on role
+* Move files to a package [0/1]
+  - [ ] Refactor

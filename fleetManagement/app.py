@@ -1,12 +1,12 @@
 import os
 from urllib.parse import urljoin, urlparse
 
+import peewee
 from admin import admin
-from api import api
+from api.api import api
 from flask import (Flask, abort, flash, jsonify, redirect, render_template,
                    request, url_for)
-from flask_login import (LoginManager, current_user, login_required,
-                         login_user, logout_user)
+from flask_login import LoginManager, current_user, login_user, logout_user
 from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect
 from models import User
@@ -21,7 +21,9 @@ login = LoginManager(app)
 login.login_view = '/login'
 app.config.from_pyfile('dev_config.py', silent=True)
 admin.init_app(app)
-api.init_app(app)
+# api.init_app(app)
+app.register_blueprint(api)
+csrf.exempt(api)
 
 
 @login.user_loader
@@ -29,9 +31,39 @@ def load_user(id):
     return User.get_or_none(User.id == id)
 
 
+@app.errorhandler(400)
+def bad_request(e):
+    return jsonify(message=str(e)), 400
+
+
+@app.errorhandler(peewee.DataError)
+def data_error(e):
+    return jsonify(message=str(e)), 400
+
+
 @app.errorhandler(404)
-def page_not_found(error):
-    return jsonify({"message": "page not found"})
+def page_not_found(e):
+    return jsonify(message="page not found"), 404
+
+
+@app.errorhandler(peewee.DoesNotExist)
+def record_does_not_exist(e):
+    return page_not_found(e)
+
+
+@app.errorhandler(405)
+def method_not_allowed(e):
+    return jsonify(message=str(e)), 405
+
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return jsonify(message=str(e)), 500
+
+
+@app.errorhandler(peewee.IntegrityError)
+def integrity_error(e):
+    return jsonify(message=str(e)), 500
 
 
 @app.route('/login', methods=['GET', 'POST'])
