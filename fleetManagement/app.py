@@ -25,11 +25,6 @@ app.register_blueprint(api)
 csrf.exempt(api)
 
 
-@login.user_loader
-def load_user(id):
-    return User.get_or_none(User.id == id)
-
-
 @app.errorhandler(400)
 def bad_request(e):
     return jsonify(message=str(e)), 400
@@ -63,6 +58,11 @@ def internal_server_error(e):
 @app.errorhandler(peewee.IntegrityError)
 def integrity_error(e):
     return jsonify(message=str(e)), 500
+
+
+@login.user_loader
+def load_user(id):
+    return User.get_or_none(User.id == id)
 
 
 @app.route('/login', methods=['GET', 'POST'])

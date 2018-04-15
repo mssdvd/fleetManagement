@@ -86,7 +86,7 @@ class Vehicle(BaseModel):
         table_name = "vehicle"
 
     id = AutoField()
-    plate = CharField()
+    plate = CharField(unique=True)
     description = CharField()
 
     def __str__(self):
