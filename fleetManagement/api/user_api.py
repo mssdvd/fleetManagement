@@ -24,7 +24,8 @@ def user_validator(data, id=None):
             return jsonify(message="The ids don't match"), 400
         valid_data['password'] = generate_password_hash(valid_data['password'])
         id = User.insert(valid_data).execute()
-        return jsonify(model_to_dict(User.get_by_id(id)))
+        return jsonify(
+            model_to_dict(User.get_by_id(id), exclude=[User.password]))
     else:
         return jsonify(message=errors), 400
 
