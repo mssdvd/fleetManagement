@@ -16,7 +16,7 @@ api.add_url_rule(
     '/user/', defaults={'id': None}, view_func=user_view, methods=['GET'])
 api.add_url_rule('/user/', view_func=user_view, methods=['POST'])
 api.add_url_rule(
-    '/user/<int:id>', view_func=user_view, methods=['DELETE', 'GET', 'PUT'])
+    '/user/<int:id>', view_func=user_view, methods=['DELETE', 'GET', 'POST','PUT'])
 
 company_view = CompanyAPI.as_view('company_api')
 api.add_url_rule(

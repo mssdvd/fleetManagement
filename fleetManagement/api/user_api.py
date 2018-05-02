@@ -43,9 +43,14 @@ class UserAPI(MethodView):
             return jsonify(
                 model_to_dict(User.get_by_id(id), exclude=[User.password]))
 
-    def post(self):
+    def post(self, id):
         data = request.get_json(force=True)
-        return user_validator(data)
+        if request.args.get('password'):
+            user = User.get_by_id(id)
+            sended_password = data.get('password')
+            return user.check_password(sended_password)
+        else:
+            return user_validator(data)
 
     def put(self, id):
         data = request.get_json(force=True)
