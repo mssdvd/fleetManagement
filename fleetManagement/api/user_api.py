@@ -1,9 +1,10 @@
 from flask import jsonify, request
 from flask.views import MethodView
 from marshmallow import Schema, fields
-from models import User
 from playhouse.shortcuts import model_to_dict
 from werkzeug.security import generate_password_hash
+
+from models import User
 
 
 class UserSchema(Schema):
@@ -46,10 +47,10 @@ class UserAPI(MethodView):
 
     def post(self, id):
         data = request.get_json(force=True)
-        if request.args.get('password'):
+        if 'password' in request.args:
             user = User.get_by_id(id)
             sended_password = data.get('password')
-            return user.check_password(sended_password)
+            return jsonify(result=user.check_password(sended_password))
         else:
             return user_validator(data)
 
