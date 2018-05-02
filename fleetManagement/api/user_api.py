@@ -38,9 +38,20 @@ class UserAPI(MethodView):
 
     def get(self, id):
         if id is None:
-            query = User.select().order_by(User.id)
-            return jsonify(
-                [model_to_dict(row, exclude=[User.password]) for row in query])
+            if 'username' in request.args:
+                query = User.get_or_none(
+                    User.username == request.args.get('username'))
+                if query is None:
+                    result = query
+                else:
+                    result = query.id
+                return jsonify(id=result)
+            else:
+                query = User.select().order_by(User.id)
+                return jsonify([
+                    model_to_dict(row, exclude=[User.password])
+                    for row in query
+                ])
         else:
             return jsonify(
                 model_to_dict(User.get_by_id(id), exclude=[User.password]))
