@@ -100,7 +100,7 @@ class MessageView(FleetManagementView):
                             'message', 'time')
 
 
-admin.add_view(CompanyView(Company))
+# admin.add_view(CompanyView(Company))
 admin.add_view(UserView(User))
 admin.add_view(RoleView(Role))
 admin.add_view(EventView(Event))
